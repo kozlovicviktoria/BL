@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "915509717097",
+    "project_id": "blproject-cb986",
+    "storage_bucket": "blproject-cb986.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:915509717097:android:74615950144b7475c89af8",
+        "android_client_info": {
+          "package_name": "com.example.bl"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCB6cQ2BPwyzqpBaT_VCLitU3C_MdvYGrA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
