@@ -2,6 +2,8 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.gms)
+    alias(libs.plugins.plugin.serialization)
+    alias(libs.plugins.compose.compiler)
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
     id("kotlin-kapt")
 
@@ -74,6 +76,9 @@ dependencies {
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.firestore)
     implementation(libs.firebase.auth)
+
+    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.androidx.navigation.compose)
     // Google Play Services для работы с картам
     implementation(libs.play.service.maps)
     // Для работы с геолокацией (если нужно будет определить местоположение пользователя)

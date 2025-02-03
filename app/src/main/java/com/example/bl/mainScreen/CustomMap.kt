@@ -81,8 +81,8 @@ fun CustomMap() {
                 state= MarkerState(position = LatLng(place.point.latitude, place.point.longitude)),
                 title = place.name,
                 snippet = place.description,
-//                icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)
-                icon = BitmapDescriptorFactory.fromPath(R.drawable.logo1.toString())
+                icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)
+ //               icon = BitmapDescriptorFactory.fromPath(R.drawable.logo1.toString())
             )
 
         }

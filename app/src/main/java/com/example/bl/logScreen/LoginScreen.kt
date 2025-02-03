@@ -1,6 +1,5 @@
 package com.example.bl.logScreen
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -14,7 +13,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -23,12 +21,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.example.bl.R
+import com.example.bl.logScreen.data.MainScreenObject
 import com.example.bl.ui.theme.BackColor
 import com.example.bl.ui.theme.ErrorColor
 import com.google.firebase.auth.FirebaseAuth
@@ -36,7 +31,10 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 
 @Composable
-fun LoginScreen(){
+fun LoginScreen(
+    onNavigationMainScreen: (MainScreenObject) -> Unit
+){
+
 
     val auth = remember{
         Firebase.auth
@@ -52,7 +50,7 @@ fun LoginScreen(){
     val passwordState = remember {
         mutableStateOf("")
     }
-    val ff = remember { mutableStateOf(false) }
+    val successAuth = remember { mutableStateOf(false) }
 
     Image(painter = painterResource(id = R.drawable.fon_login),
         contentDescription = "FL",
@@ -102,7 +100,7 @@ fun LoginScreen(){
 //        }
 
 
-        if(errorState.value.isEmpty() && ff.value){
+        if(errorState.value.isEmpty() && successAuth.value){
             MyBottomText("User is registered", Color.Blue)
         } else if (errorState.value.isNotEmpty()){
             MyBottomText(errorState.value, ErrorColor)
@@ -128,10 +126,8 @@ fun LoginScreen(){
                     auth,
                     emailState.value,
                     passwordState.value,
-                    onSignInSuccess = {
-                        Log.d("MyLog", "Sign In Success")
-//                        val intent = Intent(this, SecondActivity::class.java)
-//                        startActivity(intent)
+                    onSignInSuccess = {navData ->
+                        onNavigationMainScreen(navData)
                     },
                     onSignInFailure = {
                             error ->
@@ -147,10 +143,9 @@ fun LoginScreen(){
                     auth,
                     emailState.value,
                     passwordState.value,
-                    onSignUpSuccess = {
-                        Log.d("MyLog", "Sign Up Success")
-                        ff.value = true
-
+                    onSignUpSuccess = {navData ->
+                        onNavigationMainScreen(navData)
+                        successAuth.value = true
                     },
                     onSignUpFailure = {
                         error ->
@@ -166,7 +161,7 @@ fun signUp(
            auth: FirebaseAuth,
            email: String,
            password: String,
-           onSignUpSuccess: ()-> Unit,
+           onSignUpSuccess: (MainScreenObject)-> Unit,
            onSignUpFailure: (String)-> Unit
 ){
     if (email.isBlank() || password.isBlank()){
@@ -175,7 +170,10 @@ fun signUp(
     }
     auth.createUserWithEmailAndPassword(email, password)
         .addOnCompleteListener{ task ->
-            if(task.isSuccessful) onSignUpSuccess()
+            if(task.isSuccessful) onSignUpSuccess(MainScreenObject(
+                task.result.user?.uid!!,
+                task.result.user?.email!!
+            ))
         }
         .addOnFailureListener {
             onSignUpFailure(it.message ?: "Sign Up Error")
@@ -186,7 +184,7 @@ fun signIn(
     auth: FirebaseAuth,
     email: String,
     password: String,
-    onSignInSuccess: ()-> Unit,
+    onSignInSuccess: (MainScreenObject)-> Unit,
     onSignInFailure: (String)-> Unit
 ){
     if (email.isBlank() || password.isBlank()){
@@ -195,8 +193,11 @@ fun signIn(
     }
     auth.signInWithEmailAndPassword(email, password)
         .addOnCompleteListener{ task ->
-            if(task.isSuccessful) onSignInSuccess()
-            val user = auth.currentUser
+            if(task.isSuccessful) onSignInSuccess(MainScreenObject(
+                task.result.user?.uid!!,
+                task.result.user?.email!!
+            ))
+           // val user = auth.currentUser
         }
         .addOnFailureListener {
             onSignInFailure(it.message ?: "Sign In Error")
