@@ -9,12 +9,15 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 
 @Composable
 fun RoundCornerTextField(
     text: String,
     label: String,
+    visible: Boolean,
     onValueChange: (String)->Unit
 ){
     TextField(
@@ -29,10 +32,16 @@ fun RoundCornerTextField(
             unfocusedIndicatorColor = Color.Transparent,
             focusedIndicatorColor = Color.Transparent
         ),
-        modifier = Modifier.fillMaxWidth().border(2.dp, Color.Black, shape = RoundedCornerShape(25.dp)),
+        modifier = Modifier
+            .fillMaxWidth()
+            .border(2.dp, Color.Black, shape = RoundedCornerShape(25.dp)),
         label = {
             Text(text = label, color = Color.Gray)
         },
-        singleLine = true
+        singleLine = true,
+
+        visualTransformation = if (visible) VisualTransformation.None else PasswordVisualTransformation()
+
     )
 }
+

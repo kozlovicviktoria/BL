@@ -23,7 +23,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.bl.R
-import com.example.bl.logScreen.data.MainScreenObject
+import com.example.bl.logScreen.dataObject.MainScreenObject
 import com.example.bl.ui.theme.BackColor
 import com.example.bl.ui.theme.ErrorColor
 import com.google.firebase.auth.FirebaseAuth
@@ -35,10 +35,10 @@ fun LoginScreen(
     onNavigationMainScreen: (MainScreenObject) -> Unit
 ){
 
-
     val auth = remember{
         Firebase.auth
     }
+
     val errorState = remember {
         mutableStateOf("")
     }
@@ -74,44 +74,27 @@ fun LoginScreen(
         Spacer(modifier = Modifier.height(20.dp))
         RoundCornerTextField(
             text = emailState.value,
-            label = "Email"
+            label = "Email",
+            visible = true
         ) {
             emailState.value = it
         }
         Spacer(modifier = Modifier.height(10.dp))
         RoundCornerTextField(
             text = passwordState.value,
-            label = "Password"
+            label = "Password",
+            visible = false
         ) {
             passwordState.value = it
         }
 
         Spacer(modifier = Modifier.height(10.dp))
 
-//        if(errorState.value.isNotEmpty()){
-//            Text(
-//                text = errorState.value,
-//                color = ErrorColor,
-//                textAlign = TextAlign.Center,
-//                fontStyle = FontStyle.Italic,
-//                fontWeight = FontWeight.Bold,
-//                fontSize = 16.sp
-//            )
-//        }
-
-
         if(errorState.value.isEmpty() && successAuth.value){
             MyBottomText("User is registered", Color.Blue)
         } else if (errorState.value.isNotEmpty()){
             MyBottomText(errorState.value, ErrorColor)
         }
-
-
-//        if(errorState.value.isNotEmpty()){
-//            MyBottomText(errorState.value, ErrorColor)
-//        } else if (ff.value){
-//        MyBottomText("User is registered", Color.Blue)
-//        }
 
         Spacer(modifier = Modifier.height(10.dp))
 
@@ -162,7 +145,8 @@ fun signUp(
            email: String,
            password: String,
            onSignUpSuccess: (MainScreenObject)-> Unit,
-           onSignUpFailure: (String)-> Unit
+           onSignUpFailure: (String)-> Unit,
+
 ){
     if (email.isBlank() || password.isBlank()){
         onSignUpFailure("Email or password cannot be empty")
@@ -197,15 +181,9 @@ fun signIn(
                 task.result.user?.uid!!,
                 task.result.user?.email!!
             ))
-           // val user = auth.currentUser
         }
         .addOnFailureListener {
             onSignInFailure(it.message ?: "Sign In Error")
         }
 }
 
-fun signOut(
-    auth: FirebaseAuth
-){
-    auth.signOut()
-}

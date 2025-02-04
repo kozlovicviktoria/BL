@@ -1,4 +1,4 @@
-package com.example.bl.logScreen.data
+package com.example.bl.logScreen.dataObject
 
 import kotlinx.serialization.Serializable
 
