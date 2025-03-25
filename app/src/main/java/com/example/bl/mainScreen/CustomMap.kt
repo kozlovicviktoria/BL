@@ -57,7 +57,7 @@ fun CustomMap() {
         )
     }
 
-    db.collection("place")
+    db.collection("places")
         .get()
         .addOnCompleteListener { task ->
             if (task.isSuccessful){

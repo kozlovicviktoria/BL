@@ -15,9 +15,11 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun RoundCornerTextField(
+    singleLine: Boolean = true,
+    maxLines: Int = 1,
     text: String,
     label: String,
-    visible: Boolean,
+    visible: Boolean = true,
     onValueChange: (String)->Unit
 ){
     TextField(
@@ -38,7 +40,8 @@ fun RoundCornerTextField(
         label = {
             Text(text = label, color = Color.Gray)
         },
-        singleLine = true,
+        singleLine = singleLine,
+        maxLines = maxLines,
 
         visualTransformation = if (visible) VisualTransformation.None else PasswordVisualTransformation()
 

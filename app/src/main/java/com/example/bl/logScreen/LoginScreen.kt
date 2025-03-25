@@ -1,5 +1,6 @@
 package com.example.bl.logScreen
 
+import android.media.Image
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -13,6 +14,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -21,7 +23,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.bl.R
 import com.example.bl.logScreen.dataObject.MainScreenObject
 import com.example.bl.ui.theme.BackColor
@@ -29,6 +35,7 @@ import com.example.bl.ui.theme.ErrorColor
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+
 
 @Composable
 fun LoginScreen(
@@ -67,15 +74,24 @@ fun LoginScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ){
-        Image(painter = painterResource(id = R.drawable.logo1),
-            contentDescription = "LG",
-            modifier = Modifier.size(100.dp)
-            )
+       Row(modifier = Modifier.fillMaxWidth(),
+           horizontalArrangement = Arrangement.Center,
+           verticalAlignment = Alignment.CenterVertically) {
+
+           Image(painter = painterResource(id = R.drawable.ikon555),
+               contentDescription = "LG",
+               modifier = Modifier.size(80.dp)
+           )
+           Text(text = "BEL\nTRAVEL",
+               fontWeight = FontWeight.Bold,
+               fontSize = 26.sp
+               )
+       }
+
         Spacer(modifier = Modifier.height(20.dp))
         RoundCornerTextField(
             text = emailState.value,
-            label = "Email",
-            visible = true
+            label = "Email"
         ) {
             emailState.value = it
         }
