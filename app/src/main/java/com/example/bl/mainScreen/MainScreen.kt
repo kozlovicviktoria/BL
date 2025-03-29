@@ -1,5 +1,6 @@
 package com.example.bl.mainScreen
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -8,6 +9,7 @@ import androidx.compose.foundation.layout.Column
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -19,6 +21,8 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ModalNavigationDrawer
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
@@ -36,6 +40,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.bl.R
 import com.example.bl.auth
+import com.example.bl.bottomMenu.BottomMenu
 import com.example.bl.logScreen.LoginButton
 import com.example.bl.logScreen.dataObject.LoginScreenObject
 import com.example.bl.logScreen.dataObject.MainScreenObject
@@ -103,6 +108,7 @@ import com.google.firebase.auth.FirebaseAuth
 //    }
 //}
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun MainScreen(navData: MainScreenObject, navController: NavController) {
 
@@ -113,77 +119,96 @@ fun MainScreen(navData: MainScreenObject, navController: NavController) {
 //        contentScale = ContentScale.Crop
 //    )
 
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        Row(
-            modifier = Modifier
-                //.background(Color.LightGray)
-                .fillMaxWidth()
-                .height(70.dp),
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically
+//    Column(
+//        modifier = Modifier.fillMaxSize(),
+//        horizontalAlignment = Alignment.CenterHorizontally,
+//        verticalArrangement = Arrangement.Center
+//    ) {
+//        Row(
+//            modifier = Modifier
+//                //.background(Color.LightGray)
+//                .fillMaxWidth()
+//                .height(70.dp),
+//            horizontalArrangement = Arrangement.Center,
+//            verticalAlignment = Alignment.CenterVertically
+//
+//        ) {
+//            Image(painter = painterResource(id = R.drawable.ikon555),
+//                contentDescription = "IK",
+//                modifier = Modifier.size(40.dp)
+//            )
+//            Text(
+//                text = "BL",
+//                color = Color.DarkGray,
+//                fontSize = 30.sp,
+//                fontFamily = FontFamily.Serif,
+//                textAlign = TextAlign.Left,
+//                letterSpacing = 3.sp
+//            )
+//
+//
+//            Spacer(modifier = Modifier.width(120.dp))
+//
+//            Button(
+//                onClick = {
+//                    signOut(auth, navController)
+//                },
+//                modifier = Modifier
+//                    .width(120.dp)
+//                    .height(40.dp),
+//                colors = ButtonDefaults.buttonColors(Color.White)
+//            ){
+//                Text(
+//                    text = "Sign Out",
+//                    color = Color.Black,
+//                    fontWeight = FontWeight.Bold
+//                )
+//            }
+//        }
+//
+//
+//        Box(modifier = Modifier
+//            .fillMaxWidth().
+//            weight(3f)){
+//            CustomMap()
+//        }
 
-        ) {
-            Image(painter = painterResource(id = R.drawable.ikon555),
-                contentDescription = "IK",
-                modifier = Modifier.size(40.dp)
-            )
-            Text(
-                text = "BL",
-                color = Color.DarkGray,
-                fontSize = 30.sp,
-                fontFamily = FontFamily.Serif,
-                textAlign = TextAlign.Left,
-                letterSpacing = 3.sp
-            )
+//    Box (
+//        modifier = Modifier
+//            .fillMaxWidth()
+//            .height(80.dp)
+//    ){
+//
+//        Text("User is signed in: ${navData.email}")
+//    }
 
-
-            Spacer(modifier = Modifier.width(120.dp))
-
-            Button(
-                onClick = {
-                    signOut(auth, navController)
-                },
-                modifier = Modifier
-                    .width(120.dp)
-                    .height(40.dp),
-                colors = ButtonDefaults.buttonColors(Color.White)
-            ){
-                Text(
-                    text = "Sign Out",
-                    color = Color.Black,
-                    fontWeight = FontWeight.Bold
-                )
-            }
-        }
-
-
-        Box(modifier = Modifier
-            .fillMaxWidth().
-            weight(3f)){
-            CustomMap()
-        }
-
-    Box (
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(80.dp)
-    ){
-
-        Text("User is signed in: ${navData.email}")
-    }
-    }
+   // }
     val drawerState = rememberDrawerState(DrawerValue.Open)
     ModalNavigationDrawer(
         drawerState=drawerState,
-        modifier = Modifier.fillMaxWidth(0.7f),
+        modifier = Modifier.fillMaxWidth(),
         drawerContent = {
-            DrawerHeader()
-        }) { }
+            Column(
+                modifier = Modifier.fillMaxWidth(0.7f)
+                    .fillMaxHeight()
+            ) {
+
+                DrawerHeader()
+                DrawerBody()
+
+            }
+        }
+    ) {
+        Scaffold(
+            modifier = Modifier.fillMaxSize(),
+            bottomBar = { BottomMenu() },
+            //topBar = { BottomMenu() }
+        ) {
+            CustomMap()
+        }
+    }
 }
+
 
 fun signOut(
     auth: FirebaseAuth,

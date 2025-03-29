@@ -31,7 +31,10 @@ import com.google.maps.android.compose.rememberCameraPositionState
 fun CustomMap() {
     val context = LocalContext.current
     val mapProperties = remember { mutableStateOf(MapProperties()) }
-    val mapUiSettings = remember { MapUiSettings() }
+    val mapUiSettings = remember { MapUiSettings(
+        zoomControlsEnabled = false,
+        mapToolbarEnabled = false,
+        myLocationButtonEnabled = false) }
     val db = Firebase.firestore
     val listPlace = remember { mutableStateOf(emptyList<PlaceDBEntity>()) }
    // val places = remember { mutableStateOf(emptyList<PlaceDBEntity>()) }

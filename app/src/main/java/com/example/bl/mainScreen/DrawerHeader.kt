@@ -14,28 +14,33 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.bl.R
+import com.example.bl.ui.theme.DrawerColor
 
 @Composable
 fun DrawerHeader() {
     Column(
         Modifier.fillMaxWidth()
-            .height(170.dp)
-            .background(color = Color.Black),
+            .height(160.dp)
+            .background(color = DrawerColor),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
 
         Image(
-            modifier = Modifier.size(90.dp),
+            modifier = Modifier.size(70.dp),
             painter = painterResource(id = R.drawable.ikon555),
             contentDescription = ""
         )
         Spacer(modifier = Modifier.height(10.dp))
         Text(
-            text = "ddd",
-           color = Color.White
+            text = "WonderBel",
+            color = Color.White,
+            fontWeight = FontWeight.Bold,
+            fontSize = 25.sp
         )
     }
 
