@@ -1,4 +1,4 @@
-package com.example.bl
+package com.example.bl.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
@@ -6,10 +6,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.example.bl.logScreen.LoginScreen
-import com.example.bl.logScreen.dataObject.LoginScreenObject
-import com.example.bl.logScreen.dataObject.MainScreenObject
 import com.example.bl.mainScreen.MainScreen
-import com.google.firebase.auth.FirebaseAuth
+import com.example.bl.placeDetailsScreen.PlaceDetailsScreen
 import com.google.firebase.auth.FirebaseUser
 
 @Composable
@@ -34,6 +32,10 @@ fun NavigationApp (currentUser: FirebaseUser?){
         composable<MainScreenObject> { navEntry ->
             val navData = navEntry.toRoute<MainScreenObject>()
             MainScreen(navData, navController)
+        }
+        composable<DetailsNavObject> { backStackEntry ->
+            val placeId = backStackEntry.toRoute<DetailsNavObject>()
+            PlaceDetailsScreen(placeId, navController)
         }
     }
 }

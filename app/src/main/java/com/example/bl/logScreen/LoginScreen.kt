@@ -1,6 +1,5 @@
 package com.example.bl.logScreen
 
-import android.media.Image
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -23,13 +22,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.bl.R
-import com.example.bl.logScreen.dataObject.MainScreenObject
+import com.example.bl.navigation.MainScreenObject
 import com.example.bl.ui.theme.BackColor
 import com.example.bl.ui.theme.ErrorColor
 import com.google.firebase.auth.FirebaseAuth
@@ -157,23 +154,25 @@ fun LoginScreen(
 }
 
 fun signUp(
-           auth: FirebaseAuth,
-           email: String,
-           password: String,
-           onSignUpSuccess: (MainScreenObject)-> Unit,
-           onSignUpFailure: (String)-> Unit,
+    auth: FirebaseAuth,
+    email: String,
+    password: String,
+    onSignUpSuccess: (MainScreenObject)-> Unit,
+    onSignUpFailure: (String)-> Unit,
 
-){
+    ){
     if (email.isBlank() || password.isBlank()){
         onSignUpFailure("Email or password cannot be empty")
         return
     }
     auth.createUserWithEmailAndPassword(email, password)
         .addOnCompleteListener{ task ->
-            if(task.isSuccessful) onSignUpSuccess(MainScreenObject(
+            if(task.isSuccessful) onSignUpSuccess(
+                MainScreenObject(
                 task.result.user?.uid!!,
                 task.result.user?.email!!
-            ))
+            )
+            )
         }
         .addOnFailureListener {
             onSignUpFailure(it.message ?: "Sign Up Error")
@@ -193,10 +192,12 @@ fun signIn(
     }
     auth.signInWithEmailAndPassword(email, password)
         .addOnCompleteListener{ task ->
-            if(task.isSuccessful) onSignInSuccess(MainScreenObject(
+            if(task.isSuccessful) onSignInSuccess(
+                MainScreenObject(
                 task.result.user?.uid!!,
                 task.result.user?.email!!
-            ))
+            )
+            )
         }
         .addOnFailureListener {
             onSignInFailure(it.message ?: "Sign In Error")

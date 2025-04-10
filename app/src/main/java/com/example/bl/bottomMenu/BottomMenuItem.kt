@@ -23,17 +23,17 @@ sealed class BottomMenuItem(
         icon = R.drawable.ic_monument
     )
     object Nature : BottomMenuItem(
-        route = "nature",
+        route = "naturalBeaty",
         title = "Природа",
         icon = R.drawable.ic_monument
     )
     object LocalCulture : BottomMenuItem(
-        route = "monument",
+        route = "localCulture",
         title = "Локальная культура",
         icon = R.drawable.ic_monument
     )
     object Museum : BottomMenuItem(
-        route = "monument",
+        route = "museum",
         title = "Музеи",
         icon = R.drawable.ic_monument
     )

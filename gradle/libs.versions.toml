@@ -16,6 +16,7 @@ mapsComposeV = "2.2.0"
 navigationCompose = "2.8.0-beta05"
 serializationVersion = "2.0.0"
 serializationKotlin = "1.7.1"
+foundationLayoutAndroid = "1.6.6"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -44,6 +45,7 @@ androidx-navigation-compose = { module = "androidx.navigation:navigation-compose
 play-service-maps = { group = "com.google.android.gms", name = "play-services-maps", version.ref = "playserversion" }
 play-services-location = { group = "com.google.android.gms", name = "play-services-location", version.ref = "locationVersion" }
 maps-compose = { group = "com.google.maps.android", name = "maps-compose", version.ref = "mapsComposeV" }
+androidx-foundation-layout-android = { group = "androidx.compose.foundation", name = "foundation-layout-android", version.ref = "foundationLayoutAndroid" }
 
 
 [plugins]

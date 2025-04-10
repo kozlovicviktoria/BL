@@ -1,191 +1,56 @@
 package com.example.bl.mainScreen
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ModalNavigationDrawer
-import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.layout.HorizontalAlignmentLine
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.bl.R
-import com.example.bl.auth
 import com.example.bl.bottomMenu.BottomMenu
-import com.example.bl.logScreen.LoginButton
-import com.example.bl.logScreen.dataObject.LoginScreenObject
-import com.example.bl.logScreen.dataObject.MainScreenObject
-import com.example.bl.ui.theme.Blue4
+import com.example.bl.dataPlace.PlaceDBEntity
+import com.example.bl.navigation.LoginScreenObject
+import com.example.bl.navigation.MainScreenObject
+import com.example.bl.topMenu.TopMenu
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 
-
-//@Composable
-//fun MainTitle(navController: NavController) {
-//    Row(
-//        modifier = Modifier
-//            .background(Color.LightGray)
-//            .fillMaxWidth()
-//            .height(80.dp)
-//
-//    ) {
-//        Text(
-//            modifier = Modifier
-//                .width(50.dp)
-//                .wrapContentHeight(),
-//            text = "Travel",
-//            color = Color.DarkGray,
-//            fontSize = 35.sp,
-//            fontFamily = FontFamily.Serif,
-//            textAlign = TextAlign.Center,
-//            letterSpacing = 3.sp
-//        )
-//        LoginButton(text = "Sign Out") {
-//            signOut(auth, navController)
-//
-//    }
-//    }
-//
-//}
-//@Composable
-//fun Footer(navData: MainScreenObject){
-//    Column (
-//        modifier = Modifier
-//            .fillMaxWidth()
-//            .height(200.dp)
-//            .background(Color.DarkGray)
-//    ){
-//
-//        Text("User is signed in: ${navData.email}")
-//    }
-//}
-//
-//@Composable
-//fun MainScreen(navData: MainScreenObject, navController: NavController){
-//    Column (
-//        modifier = Modifier
-//            .fillMaxSize(),
-//        verticalArrangement = Arrangement.SpaceAround,
-//        horizontalAlignment = Alignment.CenterHorizontally
-//    ) {
-//        Row {
-//            MainTitle(navController)
-//        }
-//        Row {
-//            CustomMap()
-//        }
-//        Row {
-//            Footer(navData)
-//        }
-//    }
-//}
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun MainScreen(navData: MainScreenObject, navController: NavController) {
 
+    val drawerState = rememberDrawerState(DrawerValue.Closed)
+    val allPlaces = remember { mutableStateOf(emptyList<PlaceDBEntity>()) }
+    val db = Firebase.firestore
+    val selectedCategory = remember { mutableStateOf("all") } // Для хранения выбранной категории
 
-//    Image(painter = painterResource(id = R.drawable.fon),
-//        contentDescription = "FL",
-//        modifier = Modifier.fillMaxSize(),
-//        contentScale = ContentScale.Crop
-//    )
+    // Функция для загрузки мест
+    fun loadPlaces(category: String) {
+        getAllPlaces(db, category) { place ->
+            allPlaces.value = place
+        }
+    }
+    // Загружаем все места при запуске
+    LaunchedEffect(Unit) {
+        loadPlaces(selectedCategory.value)
+    }
 
-//    Column(
-//        modifier = Modifier.fillMaxSize(),
-//        horizontalAlignment = Alignment.CenterHorizontally,
-//        verticalArrangement = Arrangement.Center
-//    ) {
-//        Row(
-//            modifier = Modifier
-//                //.background(Color.LightGray)
-//                .fillMaxWidth()
-//                .height(70.dp),
-//            horizontalArrangement = Arrangement.Center,
-//            verticalAlignment = Alignment.CenterVertically
-//
-//        ) {
-//            Image(painter = painterResource(id = R.drawable.ikon555),
-//                contentDescription = "IK",
-//                modifier = Modifier.size(40.dp)
-//            )
-//            Text(
-//                text = "BL",
-//                color = Color.DarkGray,
-//                fontSize = 30.sp,
-//                fontFamily = FontFamily.Serif,
-//                textAlign = TextAlign.Left,
-//                letterSpacing = 3.sp
-//            )
-//
-//
-//            Spacer(modifier = Modifier.width(120.dp))
-//
-//            Button(
-//                onClick = {
-//                    signOut(auth, navController)
-//                },
-//                modifier = Modifier
-//                    .width(120.dp)
-//                    .height(40.dp),
-//                colors = ButtonDefaults.buttonColors(Color.White)
-//            ){
-//                Text(
-//                    text = "Sign Out",
-//                    color = Color.Black,
-//                    fontWeight = FontWeight.Bold
-//                )
-//            }
-//        }
-//
-//
-//        Box(modifier = Modifier
-//            .fillMaxWidth().
-//            weight(3f)){
-//            CustomMap()
-//        }
-
-//    Box (
-//        modifier = Modifier
-//            .fillMaxWidth()
-//            .height(80.dp)
-//    ){
-//
-//        Text("User is signed in: ${navData.email}")
-//    }
-
-   // }
-    val drawerState = rememberDrawerState(DrawerValue.Open)
     ModalNavigationDrawer(
         drawerState=drawerState,
+        gesturesEnabled = false,
         modifier = Modifier.fillMaxWidth(),
         drawerContent = {
             Column(
@@ -201,10 +66,16 @@ fun MainScreen(navData: MainScreenObject, navController: NavController) {
     ) {
         Scaffold(
             modifier = Modifier.fillMaxSize(),
-            bottomBar = { BottomMenu() },
-            //topBar = { BottomMenu() }
+            bottomBar = { BottomMenu(
+                onCategoryClick = { category ->
+                    selectedCategory.value = category
+                    loadPlaces(category)
+                }
+            ) },
+            topBar = { TopMenu(drawerState) }
         ) {
-            CustomMap()
+            CustomMap(allPlaces.value, navController::navigate)
+
         }
     }
 }
@@ -217,3 +88,34 @@ fun signOut(
     auth.signOut()
     navController.navigate(LoginScreenObject)
 }
+
+
+private fun getAllPlaces(
+    db: FirebaseFirestore,
+    category: String,
+    onPlace: (List<PlaceDBEntity>) -> Unit
+) {
+
+    val query = if (category == "all") {
+        db.collection("places")
+    } else {
+        db.collection("places").whereEqualTo(category, true)
+    }
+            query
+        .get()
+        .addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                onPlace(task.result.toObjects(PlaceDBEntity::class.java))
+//                val result = task.result?.documents?.map { doc ->
+//                    val place = doc.toObject(PlaceDBEntity::class.java)
+//                    place?.id = doc.id
+//                    place
+//                }?.filterNotNull() ?: emptyList()
+//                onPlace(result)
+            }
+        }
+        .addOnFailureListener { e ->
+            Log.w("Firestore", "Ошибка чтения", e)
+        }
+}
+
