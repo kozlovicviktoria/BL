@@ -33,17 +33,17 @@ fun TopMenu(
     Row (
         modifier = Modifier.fillMaxWidth()
            // .height(40.dp)
-            .background(TopColor)
+            //.background(TopColor)
     ){
         IconButton(
             onClick = {
                 scope.launch { drawerState.open() }
             },
             modifier = Modifier
-                .padding(start = 15.dp)
-                .size(32.dp, 40.dp)
+                .padding(start = 10.dp)
+                //.size(48.dp)
             ){
-            Icon(Icons.Default.Menu, contentDescription = "menu")
+            Icon(Icons.Default.Menu, contentDescription = "menu", Modifier.size(34.dp), tint = Color.White)
         }
     }
 

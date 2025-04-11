@@ -31,6 +31,7 @@ import org.w3c.dom.Text as Text
 @Composable
 fun DrawerBody() {
     val categoriesList = listOf(
+        //"Профиль",
         "Карта",
         "Избранное",
         "Посещенные"
@@ -61,7 +62,9 @@ fun DrawerBody() {
             items(categoriesList) { item ->
                 Column(
                     Modifier.fillMaxWidth()
-                        .clickable {}
+                        .clickable {
+
+                        }
                 ) {
                     Spacer(modifier = Modifier.height(20.dp))
                     Text(

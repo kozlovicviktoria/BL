@@ -18,7 +18,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import com.example.bl.bottomMenu.BottomMenu
-import com.example.bl.dataPlace.PlaceDBEntity
+import com.example.bl.data.PlaceDBEntity
 import com.example.bl.navigation.LoginScreenObject
 import com.example.bl.navigation.MainScreenObject
 import com.example.bl.topMenu.TopMenu
@@ -58,7 +58,7 @@ fun MainScreen(navData: MainScreenObject, navController: NavController) {
                     .fillMaxHeight()
             ) {
 
-                DrawerHeader()
+                DrawerHeader(drawerState)
                 DrawerBody()
 
             }
@@ -105,7 +105,12 @@ private fun getAllPlaces(
         .get()
         .addOnCompleteListener { task ->
             if (task.isSuccessful) {
-                onPlace(task.result.toObjects(PlaceDBEntity::class.java))
+                //onPlace(task.result.toObjects(PlaceDBEntity::class.java))
+                val placeList = task.result.documents.mapNotNull { doc ->
+                    val place = doc.toObject(PlaceDBEntity::class.java)
+                    place?.apply { id = doc.id } // <- сохранить id документа
+                }
+                onPlace(placeList)
 //                val result = task.result?.documents?.map { doc ->
 //                    val place = doc.toObject(PlaceDBEntity::class.java)
 //                    place?.id = doc.id
@@ -118,4 +123,3 @@ private fun getAllPlaces(
             Log.w("Firestore", "Ошибка чтения", e)
         }
 }
-
