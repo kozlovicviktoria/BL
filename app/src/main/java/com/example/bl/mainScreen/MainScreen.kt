@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Scaffold
@@ -19,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import com.example.bl.bottomMenu.BottomMenu
 import com.example.bl.data.PlaceDBEntity
+import com.example.bl.favScreen.FavScreen
 import com.example.bl.navigation.LoginScreenObject
 import com.example.bl.navigation.MainScreenObject
 import com.example.bl.topMenu.TopMenu
@@ -30,9 +32,11 @@ import com.google.firebase.ktx.Firebase
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun MainScreen(navData: MainScreenObject, navController: NavController) {
+//
+fun MainScreen(navData: MainScreenObject,
+    navController: NavController
+) {
 
-    val drawerState = rememberDrawerState(DrawerValue.Closed)
     val allPlaces = remember { mutableStateOf(emptyList<PlaceDBEntity>()) }
     val db = Firebase.firestore
     val selectedCategory = remember { mutableStateOf("all") } // Для хранения выбранной категории
@@ -48,22 +52,6 @@ fun MainScreen(navData: MainScreenObject, navController: NavController) {
         loadPlaces(selectedCategory.value)
     }
 
-    ModalNavigationDrawer(
-        drawerState=drawerState,
-        gesturesEnabled = false,
-        modifier = Modifier.fillMaxWidth(),
-        drawerContent = {
-            Column(
-                modifier = Modifier.fillMaxWidth(0.7f)
-                    .fillMaxHeight()
-            ) {
-
-                DrawerHeader(drawerState)
-                DrawerBody()
-
-            }
-        }
-    ) {
         Scaffold(
             modifier = Modifier.fillMaxSize(),
             bottomBar = { BottomMenu(
@@ -72,13 +60,13 @@ fun MainScreen(navData: MainScreenObject, navController: NavController) {
                     loadPlaces(category)
                 }
             ) },
-            topBar = { TopMenu(drawerState) }
+           // topBar = { TopMenu(drawerState) }
         ) {
             CustomMap(allPlaces.value, navController::navigate)
 
         }
     }
-}
+
 
 
 fun signOut(
@@ -111,12 +99,6 @@ private fun getAllPlaces(
                     place?.apply { id = doc.id } // <- сохранить id документа
                 }
                 onPlace(placeList)
-//                val result = task.result?.documents?.map { doc ->
-//                    val place = doc.toObject(PlaceDBEntity::class.java)
-//                    place?.id = doc.id
-//                    place
-//                }?.filterNotNull() ?: emptyList()
-//                onPlace(result)
             }
         }
         .addOnFailureListener { e ->

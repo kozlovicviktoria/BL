@@ -25,11 +25,21 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.bl.R
+import com.example.bl.navigation.FavNavObject
+import com.example.bl.navigation.MainScreenObject
+import com.example.bl.navigation.VisitedNavObject
 import org.w3c.dom.Text as Text
 
 @Composable
-fun DrawerBody() {
+fun DrawerBody(
+    onNavigationFavScreen: (FavNavObject) -> Unit,
+    onNavigationMapScreen: (MainScreenObject) -> Unit,
+    onNavigationVisitedScreen: (VisitedNavObject) -> Unit,
+    userId: String,
+    email: String
+) {
     val categoriesList = listOf(
         //"Профиль",
         "Карта",
@@ -49,12 +59,7 @@ fun DrawerBody() {
             alpha = 0.3f,
             contentScale = ContentScale.Crop
         )
-//        Column(
-//            modifier = Modifier.fillMaxSize(),
-//            horizontalAlignment = Alignment.CenterHorizontally
-//        ) {
-//
-//        }
+
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally
@@ -63,7 +68,13 @@ fun DrawerBody() {
                 Column(
                     Modifier.fillMaxWidth()
                         .clickable {
-
+                            when(
+                                item
+                            ) {
+                                "Карта" -> onNavigationMapScreen(MainScreenObject(userId, email))
+                                "Избранное" -> onNavigationFavScreen(FavNavObject(userId))
+                                "Посещенные" -> onNavigationVisitedScreen(VisitedNavObject(userId))
+                            }
                         }
                 ) {
                     Spacer(modifier = Modifier.height(20.dp))

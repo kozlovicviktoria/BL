@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -64,11 +65,11 @@ import java.io.IOException
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun PlaceDetailsScreen(placeId: DetailsNavObject, navController: NavController) {
+fun PlaceDetailsScreen(placeId: DetailsNavObject) {
 
     val comment = remember { mutableStateOf("") }
     val firestore = remember { Firebase.firestore }
-    val drawerState = rememberDrawerState(DrawerValue.Closed)
+    //val drawerState = rememberDrawerState(DrawerValue.Closed)
     val context = LocalContext.current
     val scrollState = rememberScrollState()
     val isFavorite = remember { mutableStateOf(false) }
@@ -76,6 +77,7 @@ fun PlaceDetailsScreen(placeId: DetailsNavObject, navController: NavController) 
     val favPlaces = remember { mutableStateOf(emptyList<Favorites>()) }
     val listOfPlaces = remember { mutableStateOf(emptyList<String>()) }
     val uid = FirebaseAuth.getInstance().currentUser?.uid.orEmpty()
+    val email = FirebaseAuth.getInstance().currentUser?.email.orEmpty()
 
 // Загружаем избранные при первом запуске
     LaunchedEffect(Unit) {
@@ -88,22 +90,22 @@ fun PlaceDetailsScreen(placeId: DetailsNavObject, navController: NavController) 
     }
 
 
-    ModalNavigationDrawer(
-        drawerState = drawerState,
-        gesturesEnabled = false,
-        modifier = Modifier.fillMaxWidth(),
-        drawerContent = {
-            Column(
-                modifier = Modifier.fillMaxWidth(0.7f)
-                    .fillMaxHeight()
-            ) {
-                DrawerHeader(drawerState)
-                DrawerBody()
-            }
-        }
-    ) {
-        Scaffold(topBar = { TopMenu(drawerState) })
-        {
+//    ModalNavigationDrawer(
+//        drawerState = drawerState,
+//        gesturesEnabled = false,
+//        modifier = Modifier.fillMaxWidth(),
+//        drawerContent = {
+//            Column(
+//                modifier = Modifier.fillMaxWidth(0.7f)
+//                    .fillMaxHeight()
+//            ) {
+//                DrawerHeader(drawerState)
+//                DrawerBody(navController::navigate,navController::navigate, navController::navigate, uid, email)
+//            }
+//        }
+//    ) {
+//        Scaffold(topBar = { TopMenu(drawerState) })
+//        {
             Column(modifier = Modifier.fillMaxSize()
                 .verticalScroll(scrollState, true)
                 .background(color = DrawerColor)
@@ -222,8 +224,8 @@ fun PlaceDetailsScreen(placeId: DetailsNavObject, navController: NavController) 
                 }
             }
 
-    }
-}
+ //   }
+//}
 
 
 
