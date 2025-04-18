@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.compose.compiler)
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
     id("kotlin-kapt")
+    id("kotlin-parcelize")
 
 }
 

@@ -44,14 +44,14 @@ fun NavigationApp(currentUser: FirebaseUser?) {
             }
         }
 
-        composable<DetailsNavObject> { navEntry ->
-            val placeId = navEntry.toRoute<DetailsNavObject>()
-            MainDrawerScaffold(
-                userId = currentUser?.uid ?: "",
-                email = currentUser?.email ?: "",
-                navController = navController
-            ) {
-                PlaceDetailsScreen(placeId)
+//
+        composable("PlaceDetailsScreen") { backStackEntry ->
+            val place = navController.previousBackStackEntry
+                ?.savedStateHandle
+                ?.get<DetailsNavObject>("place")
+
+            place?.let {
+                PlaceDetailsScreen(placeId = it)
             }
         }
 
@@ -62,7 +62,7 @@ fun NavigationApp(currentUser: FirebaseUser?) {
                 email = currentUser?.email ?: "",
                 navController = navController
             ) { //drawerState ->
-                FavScreen(userId)
+                FavScreen(userId, navController)
             }
         }
 

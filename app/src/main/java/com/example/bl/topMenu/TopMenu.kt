@@ -32,8 +32,8 @@ fun TopMenu(
 
     Row (
         modifier = Modifier.fillMaxWidth()
-           // .height(40.dp)
-            //.background(TopColor)
+            .height(40.dp)
+            .background(TopColor)
     ){
         IconButton(
             onClick = {
