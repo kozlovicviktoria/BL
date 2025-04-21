@@ -1,4 +1,4 @@
-package com.example.bl.favScreen
+package com.example.bl.visitedScreen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -43,22 +43,17 @@ import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.launch
 
 @Composable
-fun FavPlaceCard(
+fun VisPlaceCard(
     place: PlaceDBEntity,
     db:FirebaseFirestore,
-    isFavorite: MutableState<Boolean>,
-    favPlaces: MutableState<List<Favorites>>,
+    isVisited: MutableState<Boolean>,
+    visitedPlaces: MutableState<List<Visited>>,
     uid: String,
-   // placeId: DetailsNavObject,
+    // placeId: DetailsNavObject,
     onNavigationDetailsScreen: (DetailsNavObject) -> Unit
 ) {
     val coroutineScope = rememberCoroutineScope()
 
-    Row(
-        modifier = Modifier.height(40.dp)
-    ) {
-
-    }
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -116,10 +111,10 @@ fun FavPlaceCard(
 
                         // viewModel.toggleFavorite(uid, placeId.id)
                         coroutineScope.launch {
-                            val updatedFavs =
-                                onFavoriteClick(db, isFavorite.value, uid, Favorites(place.id))
-                            favPlaces.value = updatedFavs
-                            isFavorite.value = updatedFavs.any { it.key == place.id }
+                            val updatedVisited =
+                                onVisitedClick(db, isVisited.value, uid, Visited(place.id))
+                            visitedPlaces.value = updatedVisited
+                            isVisited.value = updatedVisited.any { it.key == place.id }
                         }
 //                    onFavoriteClick(
 //                        db = db,
@@ -135,8 +130,8 @@ fun FavPlaceCard(
                 ) {
                     Icon(
                         painter = painterResource(
-                            id = if (isFavorite.value) R.drawable.fav_true
-                            else R.drawable.fav_false
+                            id = if (isVisited.value) R.drawable.done_true
+                            else R.drawable.done_false
                         ),
                         contentDescription = "fav",
                         tint = Color.White,

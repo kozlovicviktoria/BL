@@ -14,6 +14,7 @@ import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
+import com.example.bl.navigation.FavNavObject
 import com.example.bl.topMenu.TopMenu
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
