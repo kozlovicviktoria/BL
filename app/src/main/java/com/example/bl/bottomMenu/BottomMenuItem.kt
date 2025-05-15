@@ -10,31 +10,31 @@ sealed class BottomMenuItem(
     object All : BottomMenuItem(
         route = "all",
         title = "Все",
-        icon = R.drawable.ic_monument
+        icon = R.drawable.all
     )
     object Monument : BottomMenuItem(
         route = "monument",
         title = "Памятники",
-        icon = R.drawable.ic_monument
+        icon = R.drawable.pamyatnik
     )
     object Attraction : BottomMenuItem(
         route = "attraction",
         title = "Достопримечательности",
-        icon = R.drawable.ic_monument
+        icon = R.drawable.dostop
     )
     object Nature : BottomMenuItem(
         route = "naturalBeaty",
         title = "Природа",
-        icon = R.drawable.ic_monument
+        icon = R.drawable.nature
     )
     object LocalCulture : BottomMenuItem(
         route = "localCulture",
         title = "Локальная культура",
-        icon = R.drawable.ic_monument
+        icon = R.drawable.lokal
     )
     object Museum : BottomMenuItem(
         route = "museum",
         title = "Музеи",
-        icon = R.drawable.ic_monument
+        icon = R.drawable.museum
     )
 }

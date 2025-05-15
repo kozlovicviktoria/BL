@@ -7,12 +7,15 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.outlined.Star
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.example.bl.R
 
 
 @Composable
@@ -24,8 +27,13 @@ fun StarRatingBar(
     Row(modifier = modifier, verticalAlignment = Alignment.CenterVertically) {
         (1..5).forEach { star ->
             Icon(
-                imageVector = if (star <= rating) Icons.Default.Star else Icons.Default.FavoriteBorder,
-                contentDescription = null,
+                //imageVector = if (star <= rating) Icons.Default.Star else Icons.Default.FavoriteBorder,
+                painter = if (star <= rating) {
+                    painterResource(id = R.drawable.star)
+                } else {
+                    painterResource(id = R.drawable.baseline_star_outline_24)
+                },
+                contentDescription = " ",
                 tint = Color.Yellow,
                 modifier = Modifier
                     .size(28.dp)
