@@ -2,7 +2,6 @@ package com.example.bl.mainScreen
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -14,8 +13,8 @@ import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
-import com.example.bl.navigation.FavNavObject
 import com.example.bl.topMenu.TopMenu
+import com.google.firebase.auth.FirebaseAuth
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -26,6 +25,7 @@ fun MainDrawerScaffold(
     content: @Composable (DrawerState) -> Unit
 ) {
     val drawerState = rememberDrawerState(DrawerValue.Closed)
+    val firebaseAuth = FirebaseAuth.getInstance()
 
     ModalNavigationDrawer(
         drawerState = drawerState,
@@ -37,7 +37,7 @@ fun MainDrawerScaffold(
                     .fillMaxWidth(0.7f)
                     .fillMaxHeight()
             ) {
-                DrawerHeader(drawerState)
+                DrawerHeader(drawerState, navController, firebaseAuth)
                 DrawerBody(
                     onNavigationFavScreen = { navController.navigate(it) },
                     onNavigationMapScreen = { navController.navigate(it) },
@@ -57,3 +57,4 @@ fun MainDrawerScaffold(
         }
     }
 }
+

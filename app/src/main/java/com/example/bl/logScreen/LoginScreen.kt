@@ -39,21 +39,10 @@ fun LoginScreen(
     onNavigationMainScreen: (MainScreenObject) -> Unit
 ){
 
-    val auth = remember{
-        Firebase.auth
-    }
-
-    val errorState = remember {
-        mutableStateOf("")
-    }
-
-    val emailState = remember {
-        mutableStateOf("")
-    }
-
-    val passwordState = remember {
-        mutableStateOf("")
-    }
+    val auth = remember{ Firebase.auth }
+    val errorState = remember { mutableStateOf("") }
+    val emailState = remember { mutableStateOf("") }
+    val passwordState = remember { mutableStateOf("") }
     val successAuth = remember { mutableStateOf(false) }
 
     Image(painter = painterResource(id = R.drawable.fon_login),

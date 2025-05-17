@@ -17,13 +17,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
-
-
 import com.example.bl.R
 import com.example.bl.bottomMenu.BottomMenuItem
 import com.example.bl.data.PlaceDBEntity
@@ -65,20 +62,16 @@ fun CustomMap(allPlaces: List<PlaceDBEntity>,
             Log.e("MapStyle", "Не удалось загрузить файл стиля", e)
             null
         }
-
         styleJson?.let {
             mapProperties.value = mapProperties.value.copy(mapStyleOptions = MapStyleOptions(it))
         }
     }
 
-
-
     val cameraPositionState = rememberCameraPositionState {
         position = CameraPosition.fromLatLngZoom(
-            LatLng(53.9, 28.0), 5.8f  // Центр Беларуси, масштаб 6.0 для отображения всей страны
+            LatLng(53.9, 28.0), 5.8f
         )
     }
-
 
   //   Отображаем карту с маркерами
     GoogleMap(
@@ -88,8 +81,7 @@ fun CustomMap(allPlaces: List<PlaceDBEntity>,
         uiSettings = mapUiSettings,
         cameraPositionState = cameraPositionState
     ) {
-
-         allPlaces.forEach { place ->  // добавляем .value к places
+         allPlaces.forEach { place ->
             Marker(
                 state = MarkerState(position = LatLng(place.point.latitude, place.point.longitude)),
                 title = place.name,
@@ -118,7 +110,6 @@ fun CustomMap(allPlaces: List<PlaceDBEntity>,
 
     }
 
-
         Column(
             modifier = Modifier
                 .fillMaxSize(),
@@ -131,8 +122,6 @@ fun CustomMap(allPlaces: List<PlaceDBEntity>,
                 },
                 containerColor = BottomButtonTrueColor,
                 modifier = Modifier
-                    //.align(Alignment.Top)
-                    //.padding(start = 100.dp, top = 100.dp),
                     .padding(bottom = 10.dp, end = 10.dp)
             ) {
                 Icon(painter = painterResource(R.drawable.zoom_in), contentDescription = "zoomIn")
@@ -143,38 +132,14 @@ fun CustomMap(allPlaces: List<PlaceDBEntity>,
                 },
                 containerColor = BottomButtonTrueColor,
                 modifier = Modifier
-                    //.align(Alignment.Top)
-                    //.padding(start = 100.dp, top = 100.dp),
                     .padding(bottom = 10.dp, end = 10.dp)
             ) {
                 Icon(painter = painterResource(R.drawable.zoom_out), contentDescription = "zoomOut")
             }
             SmallFloatingActionButton(
                 onClick = {
-//                    if (ContextCompat.checkSelfPermission(
-//                            context,
-//                            Manifest.permission.ACCESS_FINE_LOCATION
-//                        ) == PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(
-//                            context,
-//                            Manifest.permission.ACCESS_COARSE_LOCATION
-//                        ) == PackageManager.PERMISSION_GRANTED
-//                    ) {
-//
-////                    map.isMyLocationEnabled = true
-//
-//                        return@SmallFloatingActionButton
-//                    }
-//                    fusedLocationClient.lastLocation.addOnSuccessListener { location ->
-//                        location?.let {
-//                            scope.launch {
-//                                cameraPositionState.move(
-//                                    CameraUpdateFactory.newLatLngZoom(
-//                                        LatLng(it.latitude, it.longitude), 14f
-//                                    )
-//                                )
-//                            }
-//                        }
-//                    }
+
+
                 },
                 containerColor = BottomButtonTrueColor,
                 modifier = Modifier
@@ -187,12 +152,9 @@ fun CustomMap(allPlaces: List<PlaceDBEntity>,
 
 }
 
-
 fun bitmapDescriptorFromVector(context: Context, vectorResId: Int): BitmapDescriptor {
     val vectorDrawable = ContextCompat.getDrawable(context, vectorResId) ?: return BitmapDescriptorFactory.defaultMarker()
-
-    // Указываем размер, иначе может не отобразиться
-    val size = 60
+    val size = 70
     val bitmap = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888)
     val canvas = android.graphics.Canvas(bitmap)
 
@@ -226,7 +188,6 @@ fun iconPlace(place: PlaceDBEntity): Int {
         place.naturalBeaty -> {
                 root = BottomMenuItem.Nature.icon
             }
-            //return root
         true -> TODO()
         false -> TODO()
     }

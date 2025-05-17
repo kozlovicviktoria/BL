@@ -28,5 +28,4 @@ fun LoginButton(
     ) {
         Text(text = text)
     }
-
 }

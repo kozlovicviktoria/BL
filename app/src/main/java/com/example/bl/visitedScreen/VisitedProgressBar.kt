@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -19,16 +18,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-
 @SuppressLint("SuspiciousIndentation")
 @Composable
 fun VisitedProgressBar(visitedCount: Int, totalCount: Int) {
     val progress = if (totalCount != 0) visitedCount.toFloat() / totalCount else 0f
 
-
-
         Column(modifier = Modifier.fillMaxWidth().padding(16.dp)) {
-
             Spacer(modifier = Modifier.height(40.dp))
 
             Text(
@@ -36,7 +31,6 @@ fun VisitedProgressBar(visitedCount: Int, totalCount: Int) {
                 color = Color.Black,
                 fontSize = 16.sp
             )
-
 
             Spacer(modifier = Modifier.height(8.dp))
 
@@ -51,7 +45,7 @@ fun VisitedProgressBar(visitedCount: Int, totalCount: Int) {
                     modifier = Modifier
                         .fillMaxHeight()
                         .fillMaxWidth(progress)
-                        .background(Color(0xFF4CAF50)) // зелёный прогресс
+                        .background(Color(0xFF4CAF50))
                 )
             }
         }

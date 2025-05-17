@@ -14,8 +14,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
@@ -41,7 +39,6 @@ import coil.compose.AsyncImage
 import com.example.bl.R
 import com.example.bl.data.Favorites
 import com.example.bl.data.Visited
-import com.example.bl.favScreen.FavPlaceCard
 import com.example.bl.logScreen.LoginButton
 import com.example.bl.logScreen.RoundCornerTextField
 import com.example.bl.navigation.DetailsNavObject
@@ -54,7 +51,6 @@ import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import java.io.IOException
-
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -89,176 +85,6 @@ fun PlaceDetailsScreen(placeId: DetailsNavObject, userEmail: String) {
             commentsList.value = comm
         }
     }
-
-
-//            LazyColumn(modifier = Modifier.fillMaxSize()
-//                //.verticalScroll(scrollState, true)
-//                .background(color = DrawerColor)
-//            ) {
-//                item {
-//                    Box(
-//                        modifier = Modifier
-//                            .fillMaxWidth()
-//                            .height(350.dp),
-//                        contentAlignment = Alignment.Center
-//                    ) {
-//                        AsyncImage(
-//                            model = placeId.imageUrl,
-//                            contentDescription = "Фото места",
-//                            contentScale = ContentScale.Crop,
-//                            modifier = Modifier.fillMaxSize()
-//                        )
-//                    }
-//                }
-//                item {
-//                    Row(modifier = Modifier.padding(10.dp)) {
-//                        Text(
-//                            modifier = Modifier
-//                                .weight(1f)
-//                                .padding(top = 10.dp),
-//                            text = placeId.name,
-//                            fontSize = 26.sp,
-//                            fontWeight = FontWeight.Bold,
-//                            color = Color.White
-//                        )
-//                        IconButton(
-//                            onClick = {
-//                                coroutineScope.launch {
-//                                    val updatedFavorites = onFavoriteClick(
-//                                        db,
-//                                        isFavorite.value,
-//                                        uid,
-//                                        Favorites(placeId.id)
-//                                    )
-//                                    favPlaces.value = updatedFavorites
-//                                    isFavorite.value = updatedFavorites.any { it.key == placeId.id }
-//                                }
-//                            }
-//                        ) {
-//                            Icon(
-//                                painter = painterResource(
-//                                    id = if (isFavorite.value) R.drawable.fav_true
-//                                    else R.drawable.fav_false
-//                                ),
-//                                contentDescription = "fav",
-//                                tint = Color.White,
-//                                modifier = Modifier.size(32.dp)
-//                            )
-//                        }
-//
-//                        IconButton(
-//                            onClick = {
-//                                coroutineScope.launch {
-//                                    val updatedVisited = onVisitedClick(
-//                                        db,
-//                                        isVisited.value,
-//                                        uid,
-//                                        Visited(placeId.id)
-//                                    )
-//                                    visitedPlaces.value = updatedVisited
-//                                    isVisited.value = updatedVisited.any { it.key == placeId.id }
-//                                }
-//                            }
-//                        ) {
-//                            Icon(
-//                                painter = painterResource(
-//                                    id = if (isVisited.value) R.drawable.done_true
-//                                    else R.drawable.done_false
-//                                ),
-//                                contentDescription = "done",
-//                                tint = Color.White,
-//                                modifier = Modifier.size(32.dp)
-//                            )
-//                        }
-//                    }
-//                }
-//
-//                item {
-//                Column(
-//                    modifier = Modifier
-//                        .fillMaxWidth()
-//                        .padding(10.dp)
-//
-//                ) {
-//                    Text(
-//                        modifier = Modifier
-//                            .fillMaxWidth(),
-//                        text = getAddressFromLatLng(
-//                            context,
-//                            placeId.lat.toDouble(),
-//                            placeId.lng.toDouble()
-//                        ),
-//                        fontSize = 16.sp,
-//                        color = Color.White
-//
-//                    )
-//                    Spacer(modifier = Modifier.height(10.dp))
-//
-//                    Text(
-//                        modifier = Modifier
-//                            .fillMaxWidth(),
-//                        text = placeId.description,
-//                        fontSize = 20.sp,
-//                        color = Color.White
-//                    )
-//                    Spacer(modifier = Modifier.height(20.dp))
-//
-//                    Text(
-//                        modifier = Modifier
-//                            .fillMaxWidth(),
-//                        text = "Комментарии",
-//                        fontSize = 22.sp,
-//                        fontWeight = FontWeight.Bold,
-//                        color = Color.White
-//                    )
-//
-//                    Spacer(modifier = Modifier.height(10.dp))
-//                    RoundCornerTextField(
-//                        text = comment.value,
-//                        label = "Comment",
-//                        maxLines = 5
-//                    ) {
-//
-//                        comment.value = it
-//                    }
-//                    Spacer(modifier = Modifier.height(10.dp))
-//                    LoginButton(text = "Отправить") {
-//                        coroutineScope.launch {
-//                            val newKey = firestore.collection("places")
-//                                .document(placeId.id)
-//                                .collection("comments")
-//                                .document()
-//                                .id
-//
-//                            val newComment = CommentObject(
-//                                key = newKey,
-//                                placeId = placeId.id,
-//                                userId = uid,
-//                                userEmail = userEmail,
-//                                text = comment.value,
-//                                time = Timestamp.now()
-//                            )
-//
-//                            val updatedComments = onAddComment(firestore, placeId.id, newComment)
-//                            commentsList.value = updatedComments
-//                            comment.value = "" // очистка поля
-//                        }
-//                    }
-//
-//                    Spacer(modifier = Modifier.height(10.dp))
-//                }
-//
-//                    this@LazyColumn.items(commentsList.value, key = { it.key }) { comm ->
-//                        CommentCard(
-//                            commentObject = comm,
-//                            db = db,
-//                            placeId = placeId.id,
-//                            commentsList = commentsList
-//                        )
-//                    }
-//                }
-//            }
-//}
 
     Column(modifier = Modifier.fillMaxSize()
         .verticalScroll(scrollState, true)
@@ -358,7 +184,7 @@ fun PlaceDetailsScreen(placeId: DetailsNavObject, userEmail: String) {
                     color = Color.White
 
                 )
-                Spacer(modifier = Modifier.height(10.dp))
+                Spacer(modifier = Modifier.height(20.dp))
 
                 Text(
                     modifier = Modifier
@@ -431,8 +257,6 @@ fun PlaceDetailsScreen(placeId: DetailsNavObject, userEmail: String) {
             }
 
         Column(
-//            modifier = Modifier
-//                .fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             commentsList.value.forEach { comm ->
@@ -446,9 +270,6 @@ fun PlaceDetailsScreen(placeId: DetailsNavObject, userEmail: String) {
         }
     }
 }
-
-
-
 
 fun getAddressFromLatLng(context: Context, lat: Double, lng: Double): String {
     val geocoder = Geocoder(context, Locale("ru"))
@@ -470,7 +291,6 @@ fun getAddressFromLatLng(context: Context, lat: Double, lng: Double): String {
         "Ошибка при получении адреса"
     }
 }
-
 
 suspend fun onFavoriteClick(
     db: FirebaseFirestore,
@@ -563,7 +383,6 @@ suspend fun onAddComment(
 suspend fun onDeleteComment(
     db: FirebaseFirestore,
     placeId: String,
-    //uid: String,
     comment: CommentObject
 ): List<CommentObject> {
     val docRef = db.collection("places")
@@ -580,8 +399,6 @@ suspend fun onDeleteComment(
         emptyList()
     }
 }
-
-
 
 suspend fun onVisitedClick(
     db: FirebaseFirestore,

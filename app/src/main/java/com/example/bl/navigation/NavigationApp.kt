@@ -57,7 +57,6 @@ fun NavigationApp(currentUser: FirebaseUser?) {
             }
         }
 
-
         composable<FavNavObject> { navEntry ->
             val userId = navEntry.toRoute<FavNavObject>()
             MainDrawerScaffold(

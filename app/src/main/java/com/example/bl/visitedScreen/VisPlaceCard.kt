@@ -1,17 +1,13 @@
 package com.example.bl.visitedScreen
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -21,23 +17,18 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.bl.R
-import com.example.bl.data.Favorites
 import com.example.bl.data.PlaceDBEntity
 import com.example.bl.data.Visited
 import com.example.bl.navigation.DetailsNavObject
-import com.example.bl.placeDetailsScreen.onFavoriteClick
 import com.example.bl.placeDetailsScreen.onVisitedClick
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.launch
@@ -49,7 +40,6 @@ fun VisPlaceCard(
     isVisited: MutableState<Boolean>,
     visitedPlaces: MutableState<List<Visited>>,
     uid: String,
-    // placeId: DetailsNavObject,
     onNavigationDetailsScreen: (DetailsNavObject) -> Unit
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -108,24 +98,12 @@ fun VisPlaceCard(
                     modifier = Modifier
                         .padding(8.dp),
                     onClick = {
-
-                        // viewModel.toggleFavorite(uid, placeId.id)
                         coroutineScope.launch {
                             val updatedVisited =
                                 onVisitedClick(db, isVisited.value, uid, Visited(place.id))
                             visitedPlaces.value = updatedVisited
                             isVisited.value = updatedVisited.any { it.key == place.id }
                         }
-//                    onFavoriteClick(
-//                        db = db,
-//                        isFavorite = isFavorite.value,
-//                        uid = uid,
-//                        favorite = Favorites(place.id),
-//                    )
-//                    { updatedFavorites ->
-//                        favPlaces.value = updatedFavorites
-//                        isFavorite.value = updatedFavorites.any { it.key == place.id }
-//                    }
                     }
                 ) {
                     Icon(

@@ -41,7 +41,6 @@ fun BottomMenu(onCategoryClick : (String) -> Unit = {}) {
         BottomMenuItem.Museum
     )
 
-
     LazyRow(
         modifier = Modifier
             .fillMaxWidth()
@@ -63,7 +62,6 @@ fun BottomMenu(onCategoryClick : (String) -> Unit = {}) {
         }
     }
 }
-
 
 @Composable
 fun  FilterButton(
@@ -92,6 +90,5 @@ fun  FilterButton(
                 fontSize = 16.sp
             )
         }
-
     }
 }

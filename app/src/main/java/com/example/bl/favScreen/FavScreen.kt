@@ -15,9 +15,6 @@ import com.example.bl.data.Favorites
 import com.example.bl.data.PlaceDBEntity
 import com.example.bl.navigation.FavNavObject
 import com.example.bl.placeDetailsScreen.getAllPlacesWithFavorites
-import com.example.bl.placeDetailsScreen.getAllPlacesWithVisited
-import com.google.android.gms.tasks.Tasks
-import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -45,16 +42,6 @@ fun FavScreen(userId: FavNavObject,
             }
         }
 
-
-//    LaunchedEffect(Unit) {
-//        getAllPlacesWithFavorites(db, userId.userId) { favors ->
-//            favs.value = favors
-//            fullFavPlaces(db, favors) { fullPlaces ->
-//                favPlaces.value = fullPlaces
-//            }
-//        }
-//    }
-
     LazyColumn(
         modifier = Modifier
             .fillMaxSize(),
@@ -70,6 +57,7 @@ fun FavScreen(userId: FavNavObject,
         }
     }
 }
+
 suspend fun fullFavPlaces(
     db: FirebaseFirestore,
     favs: List<Favorites>
@@ -88,30 +76,3 @@ suspend fun fullFavPlaces(
     }
     tasks.awaitAll().filterNotNull()
 }
-
-
-//fun fullFavPlaces(
-//    db: FirebaseFirestore,
-//    favs: List<Favorites>,
-//    onComplete: (List<PlaceDBEntity>) -> Unit
-//) {
-//    val favIds = favs.map { it.key }
-//    val places = mutableListOf<PlaceDBEntity>()
-//
-//    val tasks = favIds.map { id ->
-//        db.collection("places").document(id).get()
-//    }
-//
-//    Tasks.whenAllSuccess<DocumentSnapshot>(tasks).addOnSuccessListener { documents ->
-//        documents.forEach { doc ->
-//            doc.toObject(PlaceDBEntity::class.java)?.apply { id = doc.id }?.let {
-//                places.add(it)
-//            }
-//        }
-//        onComplete(places)
-//    }.addOnFailureListener { e ->
-//        Log.w("Firestore", "Ошибка загрузки избранных мест", e)
-//        onComplete(emptyList())
-//    }
-//}
-
