@@ -10,11 +10,8 @@ lateinit var auth: FirebaseAuth
 class Initializer : Application(){
         override fun onCreate() {
             super.onCreate()
-
             FirebaseApp.initializeApp(this)
-
             auth = Firebase.auth
-
         }
     }
 

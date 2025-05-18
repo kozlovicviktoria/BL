@@ -1,5 +1,5 @@
 package com.example.bl.data
 
-data class Favorites(
+data class FavoriteEntity(
     val key : String = ""
 )

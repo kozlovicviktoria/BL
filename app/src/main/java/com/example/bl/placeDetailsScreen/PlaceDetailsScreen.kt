@@ -1,9 +1,6 @@
 package com.example.bl.placeDetailsScreen
 
 import android.annotation.SuppressLint
-import android.content.Context
-import android.location.Geocoder
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -20,10 +17,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -32,59 +25,31 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
-import java.util.Locale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import com.example.bl.R
-import com.example.bl.data.Favorites
-import com.example.bl.data.Visited
-import com.example.bl.logScreen.LoginButton
-import com.example.bl.logScreen.RoundCornerTextField
-import com.example.bl.navigation.DetailsNavObject
+import com.example.bl.logScreen.ui.LoginButton
+import com.example.bl.logScreen.ui.RoundCornerTextField
+import com.example.bl.navigation.data.DetailsNavObject
+import com.example.bl.placeDetailsScreen.ui.CommentCard
+import com.example.bl.placeDetailsScreen.ui.StarRatingBar
+import com.example.bl.placeDetailsScreen.viewModel.PlaceDetailsViewModel
 import com.example.bl.ui.theme.DrawerColor
-import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
-import java.io.IOException
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun PlaceDetailsScreen(placeId: DetailsNavObject, userEmail: String) {
+fun PlaceDetailsScreen(placeId: DetailsNavObject,
+                       userEmail: String,
+                       placeViewModel: PlaceDetailsViewModel = viewModel()) {
 
-    val comment = remember { mutableStateOf("") }
-    val commentsList = remember { mutableStateOf(emptyList<CommentObject>()) }
-    val firestore = remember { Firebase.firestore }
     val context = LocalContext.current
     val scrollState = rememberScrollState()
-    val isFavorite = remember { mutableStateOf(false) }
-    val db = Firebase.firestore
-    val favPlaces = remember { mutableStateOf(emptyList<Favorites>()) }
-    val uid = FirebaseAuth.getInstance().currentUser?.uid.orEmpty()
-    val isVisited = remember { mutableStateOf(false) }
-    val visitedPlaces = remember { mutableStateOf(emptyList<Visited>()) }
-    val coroutineScope = rememberCoroutineScope()
-    val rating = remember { mutableStateOf(0) }
 
-    LaunchedEffect(uid) {
-        if (uid.isNotBlank()) {
-            val favs = getAllPlacesWithFavorites(db, uid)
-            favPlaces.value = favs
-            isFavorite.value = favs.any { it.key == placeId.id }
-
-            val visited = getAllPlacesWithVisited(db, uid)
-            visitedPlaces.value = visited
-            isVisited.value = visited.any { it.key == placeId.id }
-
-            val comm = getAllComment(db, placeId.id)
-            commentsList.value = comm
-        }
-    }
+    placeViewModel.loadInitialData(placeId.id)
 
     Column(modifier = Modifier.fillMaxSize()
         .verticalScroll(scrollState, true)
@@ -117,21 +82,12 @@ fun PlaceDetailsScreen(placeId: DetailsNavObject, userEmail: String) {
                 )
                 IconButton(
                     onClick = {
-                        coroutineScope.launch {
-                            val updatedFavorites = onFavoriteClick(
-                                db,
-                                isFavorite.value,
-                                uid,
-                                Favorites(placeId.id)
-                            )
-                            favPlaces.value = updatedFavorites
-                            isFavorite.value = updatedFavorites.any { it.key == placeId.id }
-                        }
+                        placeViewModel.toggleFavorite(placeId.id)
                     }
                 ) {
                     Icon(
                         painter = painterResource(
-                            id = if (isFavorite.value) R.drawable.fav_true
+                            id = if (placeViewModel.isFavorite) R.drawable.fav_true
                             else R.drawable.fav_false
                         ),
                         contentDescription = "fav",
@@ -142,21 +98,12 @@ fun PlaceDetailsScreen(placeId: DetailsNavObject, userEmail: String) {
 
                 IconButton(
                     onClick = {
-                        coroutineScope.launch {
-                            val updatedVisited = onVisitedClick(
-                                db,
-                                isVisited.value,
-                                uid,
-                                Visited(placeId.id)
-                            )
-                            visitedPlaces.value = updatedVisited
-                            isVisited.value = updatedVisited.any { it.key == placeId.id }
-                        }
+                        placeViewModel.toggleVisited(placeId.id)
                     }
                 ) {
                     Icon(
                         painter = painterResource(
-                            id = if (isVisited.value) R.drawable.done_true
+                            id = if (placeViewModel.isVisited) R.drawable.done_true
                             else R.drawable.done_false
                         ),
                         contentDescription = "done",
@@ -175,7 +122,7 @@ fun PlaceDetailsScreen(placeId: DetailsNavObject, userEmail: String) {
                 Text(
                     modifier = Modifier
                         .fillMaxWidth(),
-                    text = getAddressFromLatLng(
+                    text = placeViewModel.getAddressFromLatLng(
                         context,
                         placeId.lat.toDouble(),
                         placeId.lng.toDouble()
@@ -215,42 +162,20 @@ fun PlaceDetailsScreen(placeId: DetailsNavObject, userEmail: String) {
                         fontStyle = FontStyle.Italic
 
                     )
-                    StarRatingBar(rating.value, { rating.value = it })
+                    StarRatingBar(placeViewModel.rating, { placeViewModel.rating = it })
                 }
 
                 Spacer(modifier = Modifier.height(10.dp))
                 RoundCornerTextField(
-                    text = comment.value,
+                    text = placeViewModel.comment,
                     label = "Comment",
                     maxLines = 5
                 ) {
-
-                    comment.value = it
+                    placeViewModel.comment = it
                 }
                 Spacer(modifier = Modifier.height(10.dp))
                 LoginButton(text = "Отправить") {
-                    coroutineScope.launch {
-                        val newKey = firestore.collection("places")
-                            .document(placeId.id)
-                            .collection("comments")
-                            .document()
-                            .id
-
-                        val newComment = CommentObject(
-                            key = newKey,
-                            placeId = placeId.id,
-                            userId = uid,
-                            userEmail = userEmail,
-                            text = comment.value,
-                            time = Timestamp.now(),
-                            rating = rating.value
-                        )
-
-                        val updatedComments = onAddComment(firestore, placeId.id, newComment)
-                        commentsList.value = updatedComments
-                        comment.value = "" // очистка поля
-                        rating.value = 0
-                    }
+                    placeViewModel.submitComment(placeId.id, userEmail)
                 }
 
                 Spacer(modifier = Modifier.height(10.dp))
@@ -259,188 +184,14 @@ fun PlaceDetailsScreen(placeId: DetailsNavObject, userEmail: String) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            commentsList.value.forEach { comm ->
+            placeViewModel.commentsList.forEach { comm ->
                 CommentCard(
                     commentObject = comm,
-                    db = db,
                     placeId = placeId.id,
-                    commentsList = commentsList
+                    placeViewModel
                 )
             }
         }
-    }
-}
-
-fun getAddressFromLatLng(context: Context, lat: Double, lng: Double): String {
-    val geocoder = Geocoder(context, Locale("ru"))
-    return try {
-        val addresses = geocoder.getFromLocation(lat, lng, 1)
-        if (!addresses.isNullOrEmpty()) {
-            val address = addresses[0]
-            val city = address.locality
-            val region = address.adminArea
-            val fullAddress = address.getAddressLine(0)
-
-            "Город: $city\nОбласть: $region\nАдрес: $fullAddress"
-            return fullAddress
-        } else {
-            "Адрес не найден"
-        }
-    } catch (e: IOException) {
-        e.printStackTrace()
-        "Ошибка при получении адреса"
-    }
-}
-
-suspend fun onFavoriteClick(
-    db: FirebaseFirestore,
-    isFavorite: Boolean,
-    uid: String,
-    favorite: Favorites
-): List<Favorites> {
-
-    val docRef = db.collection("users")
-        .document(uid)
-        .collection("favorites")
-        .document(favorite.key)
-
-    return try {
-        if (!isFavorite) {
-            docRef.set(favorite).await()
-            Log.d("FAVORITE", "Добавлено в избранное")
-        } else {
-            docRef.delete().await()
-            Log.d("FAVORITE", "Удалено из избранного")
-        }
-
-        getAllPlacesWithFavorites(db, uid)
-    } catch (e: Exception) {
-        Log.e("FAVORITE", "Ошибка при обновлении избранного", e)
-        emptyList()
-    }
-}
-
-
-suspend fun getAllPlacesWithFavorites(
-    db: FirebaseFirestore,
-    userId: String
-): List<Favorites> {
-    return try {
-        val snapshot = db.collection("users")
-            .document(userId)
-            .collection("favorites")
-            .get()
-            .await()
-
-        snapshot.documents.mapNotNull { it.toObject(Favorites::class.java) }
-    } catch (e: Exception) {
-        emptyList()
-    }
-}
-
-suspend fun getAllComment(
-    db: FirebaseFirestore,
-    placeId: String
-): List<CommentObject> {
-    return try {
-        val snapshot = db.collection("places")
-            .document(placeId)
-            .collection("comments")
-            .get()
-            .await()
-
-  //      snapshot.documents.mapNotNull { it.toObject(CommentObject::class.java) }
-        snapshot.documents.mapNotNull { doc ->
-            val comm = doc.toObject(CommentObject::class.java)
-            comm?.apply { key = doc.id }
-        }
-    } catch (e: Exception) {
-        emptyList()
-    }
-}
-
-suspend fun onAddComment(
-    db: FirebaseFirestore,
-    placeId: String,
-    //uid: String,
-    comment: CommentObject
-): List<CommentObject> {
-    val docRef = db.collection("places")
-        .document(placeId)
-        .collection("comments")
-        .document(comment.key)
-
-    return try {
-            docRef.set(comment).await()
-            Log.d("FAVORITE", "Комментарий добавлен")
-        getAllComment(db, placeId) // ← вернём обновлённый список
-    } catch (e: Exception) {
-        Log.e("FAVORITE", "Ошибка при добавлении комментария", e)
-        emptyList()
-    }
-}
-
-suspend fun onDeleteComment(
-    db: FirebaseFirestore,
-    placeId: String,
-    comment: CommentObject
-): List<CommentObject> {
-    val docRef = db.collection("places")
-        .document(placeId)
-        .collection("comments")
-        .document(comment.key)
-
-    return try {
-        docRef.delete().await()
-        Log.d("FAVORITE", "Комментарий удален")
-        getAllComment(db, placeId) // ← вернём обновлённый список
-    } catch (e: Exception) {
-        Log.e("FAVORITE", "Ошибка при удалении комментария", e)
-        emptyList()
-    }
-}
-
-suspend fun onVisitedClick(
-    db: FirebaseFirestore,
-    isVisited: Boolean,
-    uid: String,
-    visited: Visited
-): List<Visited> {
-    val docRef = db.collection("users")
-        .document(uid)
-        .collection("visited")
-        .document(visited.key)
-
-    return try {
-        if (!isVisited) {
-            docRef.set(visited).await()
-            Log.d("FAVORITE", "Добавлено в избранное")
-        } else {
-            docRef.delete().await()
-            Log.d("FAVORITE", "Удалено из избранного")
-        }
-
-        getAllPlacesWithVisited(db, uid) // ← вернём обновлённый список
-    } catch (e: Exception) {
-        Log.e("FAVORITE", "Ошибка при обновлении избранного", e)
-        emptyList()
-    }
-}
-
-suspend fun getAllPlacesWithVisited(
-    db: FirebaseFirestore,
-    userId: String
-): List<Visited> {
-    return try {
-        val snapshot = db.collection("users")
-            .document(userId)
-            .collection("visited")
-            .get()
-            .await()
-
-        snapshot.documents.mapNotNull { it.toObject(Visited::class.java) }
-    } catch (e: Exception) {
-        emptyList()
     }
 }
 

@@ -1,5 +1,5 @@
 package com.example.bl.data
 
-data class Visited(
+data class VisitedEntity(
     val key: String = ""
 )

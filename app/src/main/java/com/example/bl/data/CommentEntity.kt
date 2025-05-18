@@ -1,8 +1,8 @@
-package com.example.bl.placeDetailsScreen
+package com.example.bl.data
 
 import com.google.firebase.Timestamp
 
-data class CommentObject (
+data class CommentEntity (
     var key: String = "",
     var placeId: String = "",
     var userId: String = "",

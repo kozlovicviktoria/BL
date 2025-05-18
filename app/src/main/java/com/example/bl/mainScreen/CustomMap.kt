@@ -24,7 +24,7 @@ import androidx.core.content.ContextCompat
 import com.example.bl.R
 import com.example.bl.bottomMenu.BottomMenuItem
 import com.example.bl.data.PlaceDBEntity
-import com.example.bl.navigation.DetailsNavObject
+import com.example.bl.navigation.data.DetailsNavObject
 import com.example.bl.ui.theme.BottomButtonTrueColor
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.BitmapDescriptor
@@ -89,7 +89,8 @@ fun CustomMap(allPlaces: List<PlaceDBEntity>,
                 icon = bitmapDescriptorFromVector(context, iconPlace(place)),
                 onClick = {
                     if (selectedMarker.value?.name == place.name) {
-                        onNavigationDetailsScreen(DetailsNavObject(
+                        onNavigationDetailsScreen(
+                            DetailsNavObject(
                             place.id,
                             place.name,
                             place.description,
@@ -97,7 +98,8 @@ fun CustomMap(allPlaces: List<PlaceDBEntity>,
                             place.point.latitude.toString(),
                             place.point.longitude.toString(),
                             place.isFavorite
-                        ))
+                        )
+                        )
                         // Повторный клик — переходим на экран деталей
                     } else {
                         // Первый клик — просто выделяем маркер

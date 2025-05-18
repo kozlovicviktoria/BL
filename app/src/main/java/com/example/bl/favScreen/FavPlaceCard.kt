@@ -15,8 +15,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -26,23 +24,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.bl.R
-import com.example.bl.data.Favorites
 import com.example.bl.data.PlaceDBEntity
-import com.example.bl.navigation.DetailsNavObject
-import com.example.bl.placeDetailsScreen.onFavoriteClick
-import com.google.firebase.firestore.FirebaseFirestore
-import kotlinx.coroutines.launch
+import com.example.bl.favScreen.viewModel.FavViewModel
+import com.example.bl.navigation.data.DetailsNavObject
 
 @Composable
 fun FavPlaceCard(
     place: PlaceDBEntity,
-    db:FirebaseFirestore,
-    isFavorite: MutableState<Boolean>,
-    favPlaces: MutableState<List<Favorites>>,
     uid: String,
+    viewModel: FavViewModel,
     onNavigationDetailsScreen: (DetailsNavObject) -> Unit
 ) {
-    val coroutineScope = rememberCoroutineScope()
 
     Row(
         modifier = Modifier.height(40.dp)
@@ -103,17 +95,12 @@ fun FavPlaceCard(
                     modifier = Modifier
                         .padding(8.dp),
                     onClick = {
-                        coroutineScope.launch {
-                            val updatedFavs =
-                                onFavoriteClick(db, isFavorite.value, uid, Favorites(place.id))
-                            favPlaces.value = updatedFavs
-                            isFavorite.value = updatedFavs.any { it.key == place.id }
-                        }
+                        viewModel.FavUpdate(uid, place.id)
                     }
                 ) {
                     Icon(
                         painter = painterResource(
-                            id = if (isFavorite.value) R.drawable.fav_true
+                            id = if (viewModel.isFavorite) R.drawable.fav_true
                             else R.drawable.fav_false
                         ),
                         contentDescription = "fav",

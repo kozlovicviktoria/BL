@@ -9,9 +9,7 @@ import com.example.bl.navigation.NavigationApp
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         val currentUser = auth.currentUser
-
         setContent {
                 NavigationApp(currentUser)
         }

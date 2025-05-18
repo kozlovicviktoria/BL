@@ -1,4 +1,4 @@
-package com.example.bl.mainScreen
+package com.example.bl.drawer
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -29,7 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.bl.R
-import com.example.bl.navigation.LoginScreenObject
+import com.example.bl.navigation.data.LoginScreenObject
 import com.example.bl.ui.theme.DrawerColor
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.launch

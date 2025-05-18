@@ -1,4 +1,4 @@
-package com.example.bl.visitedScreen
+package com.example.bl.visitedScreen.ui
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background

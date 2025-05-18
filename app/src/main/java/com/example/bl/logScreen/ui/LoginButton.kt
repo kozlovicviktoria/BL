@@ -1,4 +1,4 @@
-package com.example.bl.logScreen
+package com.example.bl.logScreen.ui
 
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width

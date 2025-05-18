@@ -1,4 +1,4 @@
-package com.example.bl.logScreen
+package com.example.bl.logScreen.ui
 
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -9,7 +9,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun MyBottomText(text : String, color: Color) {
+fun LoginBottomText(text : String, color: Color) {
     Text(
         text = text,
         color = color,

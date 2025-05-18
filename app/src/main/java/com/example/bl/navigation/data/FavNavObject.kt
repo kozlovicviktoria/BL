@@ -1,4 +1,4 @@
-package com.example.bl.navigation
+package com.example.bl.navigation.data
 
 import kotlinx.serialization.Serializable
 

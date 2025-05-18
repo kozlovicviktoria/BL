@@ -1,7 +1,5 @@
-package com.example.bl.placeDetailsScreen
+package com.example.bl.placeDetailsScreen.ui
 
-import android.icu.text.SimpleDateFormat
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -17,8 +15,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -27,21 +23,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.bl.R
-import com.google.firebase.Timestamp
-import com.google.firebase.firestore.FirebaseFirestore
-import kotlinx.coroutines.launch
-import java.util.Locale
+import com.example.bl.data.CommentEntity
+import com.example.bl.placeDetailsScreen.viewModel.PlaceDetailsViewModel
 
 @Composable
 fun CommentCard(
-    commentObject: CommentObject,
-    db:FirebaseFirestore,
+    commentObject: CommentEntity,
     placeId: String,
-    commentsList: MutableState<List<CommentObject>>
+    viewModel: PlaceDetailsViewModel
 ) {
-    val coroutineScope = rememberCoroutineScope()
-
-
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -55,7 +45,6 @@ fun CommentCard(
             Row(
                 modifier = Modifier.padding(8.dp),
             ) {
-
                 Column(
 
                 ) {
@@ -71,7 +60,7 @@ fun CommentCard(
                                 fontSize = 15.sp
                             )
                             Text(
-                                text = formatTimestamp(commentObject.time),
+                                text = viewModel.formatTimestamp(commentObject.time),
                                 fontSize = 12.sp
                             )
                         }
@@ -87,11 +76,7 @@ fun CommentCard(
 
                         IconButton(
                             onClick = {
-                                coroutineScope.launch {
-                                    val updatedComments =
-                                        onDeleteComment(db, placeId, commentObject)
-                                    commentsList.value = updatedComments
-                                }
+                                viewModel.deleteComment(placeId, commentObject)
                             }
                         ){
                             Icon(
@@ -113,11 +98,5 @@ fun CommentCard(
         }
     }
 
-fun formatTimestamp(timestamp: Timestamp?): String {
-    if (timestamp == null) return "Неизвестно"
 
-    val date = timestamp.toDate()
-    val formatter = SimpleDateFormat("dd MMMM yyyy, HH:mm", Locale("ru"))
-    return formatter.format(date)
-}
 
