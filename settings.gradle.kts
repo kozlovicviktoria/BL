@@ -19,5 +19,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "BL"
+rootProject.name = "WonderBel"
 include(":app")

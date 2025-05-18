@@ -11,11 +11,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.bl"
+    namespace = "com.example.wonderbel"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.bl"
+        applicationId = "com.example.wonderbel"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
